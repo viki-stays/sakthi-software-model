@@ -12,7 +12,7 @@ with col1:
     st.metric("Battery","78%")
 
 with col2:
-    st.metric("Waypoint", str(index))
+    st.metric("Waypoint", "12")
 
 with col3:
     st.metric("Speed","0.8 m/s")
