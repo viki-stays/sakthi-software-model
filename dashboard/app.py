@@ -1,7 +1,7 @@
 import streamlit as st
 import folium
 from streamlit_folium import st_folium
-
+import json
 st.set_page_config(page_title="SAKTHI Dashboard")
 
 st.title("🌾 SAKTHI Control Dashboard")
@@ -23,6 +23,10 @@ m = folium.Map(
     location=[12.9716,77.5946],
     zoom_start=18
 )
+with open("path_planning/waypoints.json") as f:
+    waypoints = json.load(f)
+
+st.write(waypoints)
 farm_boundary = [
     [12.9716,77.5946],
     [12.9718,77.5946],
