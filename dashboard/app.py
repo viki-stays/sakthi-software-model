@@ -52,7 +52,7 @@ folium.Polygon(
 ).add_to(m)
 # Rover Marker
 
-rover_position = path[0]
+rover_position = path[1]
 
 folium.Marker(
     rover_position,
