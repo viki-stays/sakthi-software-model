@@ -1,3 +1,4 @@
+from mqtt_client import latest_data
 import streamlit as st
 import folium
 from streamlit_folium import st_folium
@@ -44,9 +45,12 @@ for x, y in waypoints:
 
 index = int(time.time() / 3) % len(path)
 
-rover_position = path[index]
+rover_position = [
+    latest_data["lat"],
+    latest_data["lon"]
+]
 
-battery = max(100 - index * 8, 5)
+battery = latest_data["battery"]
 
 # ======================================
 # TOP METRICS
@@ -144,7 +148,9 @@ st.subheader("🤖 Current Task")
 if battery < 20:
     st.error("⚠ Low Battery - Return To Base Activated")
 else:
-    st.success(f"Moving to Waypoint {index}")
+    st.success(
+    f"Status : {latest_data['status']}"
+)
 
 # ======================================
 # DISEASE ALERT PANEL
