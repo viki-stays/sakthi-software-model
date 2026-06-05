@@ -58,6 +58,11 @@ folium.Marker(
     rover_position,
     popup="SAKTHI Rover"
 ).add_to(m)
+folium.Marker(
+    [12.97175,77.59475],
+    popup="Disease Detected",
+    icon=folium.Icon(color="red")
+).add_to(m)
 
 st.subheader("Live Farm Map")
 
