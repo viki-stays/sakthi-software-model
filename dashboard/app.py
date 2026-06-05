@@ -27,6 +27,17 @@ with open("path_planning/waypoints.json") as f:
     waypoints = json.load(f)
 
 st.write(waypoints)
+base_lat = 12.9716
+base_lon = 77.5946
+
+path = []
+
+for x, y in waypoints:
+
+    lat = base_lat + y * 0.00001
+    lon = base_lon + x * 0.00001
+
+    path.append([lat, lon])
 farm_boundary = [
     [12.9716,77.5946],
     [12.9718,77.5946],
@@ -69,7 +80,12 @@ folium.Marker(
 ).add_to(m)
 
 st.subheader("Live Farm Map")
-
+folium.PolyLine(
+    path,
+    color="blue",
+    weight=4,
+    popup="Generated Path"
+).add_to(m)
 st_folium(
     m,
     width=900,
