@@ -1,13 +1,27 @@
 import streamlit as st
 
-st.title("🌾 SAKTHI Dashboard")
+st.set_page_config(page_title="SAKTHI Dashboard")
 
-st.write("Battery: 78%")
-st.write("Location: Waypoint 12")
-st.write("Status: Monitoring Row 3")
+st.title("🌾 SAKTHI Control Dashboard")
+
+col1, col2, col3 = st.columns(3)
+
+with col1:
+    st.metric("Battery", "78%")
+
+with col2:
+    st.metric("Waypoint", "12")
+
+with col3:
+    st.metric("Speed", "0.8 m/s")
+
+st.divider()
+
+st.subheader("Current Task")
+st.success("Monitoring Row 3")
 
 st.subheader("Disease Alert")
-st.success("No disease detected")
+st.info("No disease detected")
 
 st.subheader("Irrigation Advisory")
-st.info("Skip watering today")
+st.warning("Skip watering today")
