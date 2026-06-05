@@ -52,8 +52,10 @@ folium.Polygon(
 ).add_to(m)
 # Rover Marker
 
+rover_position = path[0]
+
 folium.Marker(
-    [12.9716,77.5946],
+    rover_position,
     popup="SAKTHI Rover"
 ).add_to(m)
 
