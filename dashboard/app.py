@@ -30,7 +30,19 @@ farm_boundary = [
     [12.9716,77.5949],
     [12.9716,77.5946]
 ]
+path = [
+    [12.97162,77.59462],
+    [12.97175,77.59462],
+    [12.97175,77.59475],
+    [12.97162,77.59475]
+]
 
+folium.PolyLine(
+    path,
+    color="blue",
+    weight=4,
+    popup="Planned Path"
+).add_to(m)
 folium.Polygon(
     farm_boundary,
     color="green",
