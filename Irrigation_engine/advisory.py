@@ -47,4 +47,17 @@ result = irrigation_advisory(
     crop_type="Tomato"
 )
 
-print(result)
+result = irrigation_advisory(
+    temperature=38,
+    humidity=50,
+    soil_moisture=20,
+    rain_forecast=10,
+    wind_speed=20,
+    crop_type="Tomato"
+)
+
+print("\nSAKTHI Irrigation Advisory")
+print("--------------------------")
+print("Water Today :", result["water_today"])
+print("Reason      :", result["reason"])
+print("Suggested   :", result["suggested_water"])
