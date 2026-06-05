@@ -23,7 +23,21 @@ m = folium.Map(
     location=[12.9716,77.5946],
     zoom_start=18
 )
+farm_boundary = [
+    [12.9716,77.5946],
+    [12.9718,77.5946],
+    [12.9718,77.5949],
+    [12.9716,77.5949],
+    [12.9716,77.5946]
+]
 
+folium.Polygon(
+    farm_boundary,
+    color="green",
+    fill=True,
+    fill_opacity=0.2,
+    popup="Farm Boundary"
+).add_to(m)
 # Rover Marker
 
 folium.Marker(
