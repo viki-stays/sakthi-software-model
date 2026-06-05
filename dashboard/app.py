@@ -76,7 +76,13 @@ st.subheader("Current Task")
 st.success("Monitoring Row 3")
 
 st.subheader("Disease Alert")
-st.info("No disease detected")
+
+disease_status = False
+
+if disease_status:
+    st.error("Leaf Blight detected")
+else:
+    st.success("No disease detected")
 
 st.subheader("Irrigation Advisory")
 st.warning("Skip watering today")
