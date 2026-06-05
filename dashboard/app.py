@@ -12,7 +12,7 @@ with col1:
     st.metric("Battery","78%")
 
 with col2:
-    st.metric("Waypoint","12")
+    st.metric("Waypoint", str(index))
 
 with col3:
     st.metric("Speed","0.8 m/s")
@@ -67,7 +67,11 @@ folium.Polygon(
 ).add_to(m)
 # Rover Marker
 
-rover_position = path[1]
+import time
+
+index = int(time.time()) % len(path)
+
+rover_position = path[index]
 
 folium.Marker(
     rover_position,
@@ -93,7 +97,7 @@ st_folium(
 )
 
 st.subheader("Current Task")
-st.success("Monitoring Row 3")
+st.success(f"Moving to Waypoint {index}")
 
 st.subheader("Disease Alert")
 
