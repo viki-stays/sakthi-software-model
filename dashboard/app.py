@@ -22,7 +22,10 @@ st_autorefresh(
 )
 
 st.title("🌾 SAKTHI Control Dashboard")
+# MQTT Debug Panel
+st.subheader("📡 Live MQTT Data")
 
+st.json(latest_data)
 # ======================================
 # LOAD WAYPOINTS
 # ======================================
