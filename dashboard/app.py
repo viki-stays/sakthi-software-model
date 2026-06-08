@@ -1,9 +1,10 @@
-from mqtt_client import latest_data
+from mqtt_subscriber import latest_data
+
 import streamlit as st
+from streamlit_autorefresh import st_autorefresh
 import folium
 from streamlit_folium import st_folium
 import json
-import time
 
 # ======================================
 # PAGE CONFIG
@@ -14,13 +15,22 @@ st.set_page_config(
     layout="wide"
 )
 
+# Auto refresh every 5 seconds
+st_autorefresh(
+    interval=5000,
+    key="sakthi_refresh"
+)
+
 st.title("🌾 SAKTHI Control Dashboard")
+
+# Debug (remove later if needed)
+st.write("Live MQTT Data:", latest_data)
 
 # ======================================
 # LOAD WAYPOINTS
 # ======================================
 
-with open("path_planning/waypoints.json") as f:
+with open("../path_planning/waypoints.json") as f:
     waypoints = json.load(f)
 
 # ======================================
@@ -40,17 +50,19 @@ for x, y in waypoints:
     path.append([lat, lon])
 
 # ======================================
-# ROVER SIMULATION
+# LIVE MQTT DATA
 # ======================================
 
-index = int(time.time() / 3) % len(path)
+battery = latest_data["battery"]
+
+index = latest_data["waypoint"]
 
 rover_position = [
     latest_data["lat"],
     latest_data["lon"]
 ]
 
-battery = latest_data["battery"]
+status = latest_data["status"]
 
 # ======================================
 # TOP METRICS
@@ -59,20 +71,29 @@ battery = latest_data["battery"]
 col1, col2, col3 = st.columns(3)
 
 with col1:
-    st.metric("🔋 Battery", f"{battery}%")
+    st.metric(
+        "🔋 Battery",
+        f"{battery}%"
+    )
 
 with col2:
-    st.metric("📍 Waypoint", str(index))
+    st.metric(
+        "📍 Waypoint",
+        str(index)
+    )
 
 with col3:
-    st.metric("🚜 Speed", "0.8 m/s")
+    st.metric(
+        "🚜 Speed",
+        "0.8 m/s"
+    )
 
 # ======================================
 # MAP
 # ======================================
 
 m = folium.Map(
-    location=[12.9717, 77.5947],
+    location=rover_position,
     zoom_start=18
 )
 
@@ -81,11 +102,11 @@ m = folium.Map(
 # ======================================
 
 farm_boundary = [
-    [12.9716, 77.5946],
-    [12.9718, 77.5946],
-    [12.9718, 77.5949],
-    [12.9716, 77.5949],
-    [12.9716, 77.5946]
+    [12.9716,77.5946],
+    [12.9718,77.5946],
+    [12.9718,77.5949],
+    [12.9716,77.5949],
+    [12.9716,77.5946]
 ]
 
 folium.Polygon(
@@ -97,7 +118,7 @@ folium.Polygon(
 ).add_to(m)
 
 # ======================================
-# GENERATED COVERAGE PATH
+# PLANNED PATH
 # ======================================
 
 folium.PolyLine(
@@ -108,27 +129,32 @@ folium.PolyLine(
 ).add_to(m)
 
 # ======================================
-# ROVER POSITION
+# LIVE ROVER POSITION
 # ======================================
 
 folium.Marker(
     rover_position,
     popup=f"SAKTHI Rover - WP {index}",
-    icon=folium.Icon(color="blue", icon="info-sign")
+    icon=folium.Icon(
+        color="blue",
+        icon="info-sign"
+    )
 ).add_to(m)
 
 # ======================================
-# DISEASE ALERT LOCATION
+# DISEASE ALERT MARKER
 # ======================================
 
 folium.Marker(
     path[-1],
-    popup="Disease Detected",
-    icon=folium.Icon(color="red")
+    popup="Disease Alert Zone",
+    icon=folium.Icon(
+        color="red"
+    )
 ).add_to(m)
 
 # ======================================
-# MAP DISPLAY
+# DISPLAY MAP
 # ======================================
 
 st.subheader("🗺️ Live Farm Map")
@@ -140,17 +166,42 @@ st_folium(
 )
 
 # ======================================
-# CURRENT TASK
+# CURRENT STATUS
 # ======================================
 
 st.subheader("🤖 Current Task")
 
-if battery < 20:
-    st.error("⚠ Low Battery - Return To Base Activated")
-else:
+if status == "MISSION":
+
     st.success(
-    f"Status : {latest_data['status']}"
-)
+        "MISSION IN PROGRESS"
+    )
+
+elif status == "RETURNING_TO_BASE":
+
+    st.warning(
+        "RETURNING TO BASE"
+    )
+
+elif status == "CHARGING":
+
+    st.info(
+        "CHARGING"
+    )
+
+else:
+
+    st.write(status)
+
+# ======================================
+# BATTERY ALERT
+# ======================================
+
+if battery < 25:
+
+    st.error(
+        "⚠ LOW BATTERY DETECTED"
+    )
 
 # ======================================
 # DISEASE ALERT PANEL
@@ -158,12 +209,9 @@ else:
 
 st.subheader("🌱 Disease Alert")
 
-disease_status = False
-
-if disease_status:
-    st.error("Leaf Blight Detected")
-else:
-    st.success("No Disease Detected")
+st.success(
+    "No Disease Detected"
+)
 
 # ======================================
 # IRRIGATION ADVISORY
@@ -171,7 +219,9 @@ else:
 
 st.subheader("💧 Irrigation Advisory")
 
-st.warning("Skip Watering Today")
+st.warning(
+    "Skip Watering Today"
+)
 
 # ======================================
 # MISSION DETAILS
@@ -179,8 +229,22 @@ st.warning("Skip Watering Today")
 
 with st.expander("📊 Mission Details"):
 
-    st.write(f"Total Waypoints: {len(path)}")
-    st.write(f"Current Waypoint: {index}")
-    st.write(f"Battery Level: {battery}%")
-    st.write("Navigation Mode: Autonomous")
-    st.write("Path Type: Lawnmower Coverage")
+    st.write(
+        f"Current Waypoint: {index}"
+    )
+
+    st.write(
+        f"Battery Level: {battery}%"
+    )
+
+    st.write(
+        f"Status: {status}"
+    )
+
+    st.write(
+        "Navigation Mode: Autonomous"
+    )
+
+    st.write(
+        "Path Type: Lawnmower Coverage"
+    )
