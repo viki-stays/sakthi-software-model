@@ -29,10 +29,22 @@ st.write("Live MQTT Data:", latest_data)
 # ======================================
 # LOAD WAYPOINTS
 # ======================================
+import os
 
-with open("../path_planning/waypoints.json") as f:
+BASE_DIR = os.path.dirname(
+    os.path.dirname(
+        os.path.abspath(__file__)
+    )
+)
+
+WAYPOINT_FILE = os.path.join(
+    BASE_DIR,
+    "path_planning",
+    "waypoints.json"
+)
+
+with open(WAYPOINT_FILE, "r") as f:
     waypoints = json.load(f)
-
 # ======================================
 # CONVERT WAYPOINTS TO MAP COORDINATES
 # ======================================
