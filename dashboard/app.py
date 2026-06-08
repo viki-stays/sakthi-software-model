@@ -5,6 +5,7 @@ from streamlit_autorefresh import st_autorefresh
 import folium
 from streamlit_folium import st_folium
 import json
+import os
 
 # ======================================
 # PAGE CONFIG
@@ -15,7 +16,6 @@ st.set_page_config(
     layout="wide"
 )
 
-# Auto refresh every 5 seconds
 st_autorefresh(
     interval=5000,
     key="sakthi_refresh"
@@ -23,13 +23,9 @@ st_autorefresh(
 
 st.title("🌾 SAKTHI Control Dashboard")
 
-# Debug (remove later if needed)
-st.write("Live MQTT Data:", latest_data)
-
 # ======================================
 # LOAD WAYPOINTS
 # ======================================
-import os
 
 BASE_DIR = os.path.dirname(
     os.path.dirname(
@@ -45,6 +41,7 @@ WAYPOINT_FILE = os.path.join(
 
 with open(WAYPOINT_FILE, "r") as f:
     waypoints = json.load(f)
+
 # ======================================
 # CONVERT WAYPOINTS TO MAP COORDINATES
 # ======================================
@@ -75,6 +72,16 @@ rover_position = [
 ]
 
 status = latest_data["status"]
+
+# ======================================
+# DISEASE DETECTION RESULT
+# ======================================
+
+disease_status = True
+
+disease_name = "Potato Early Blight"
+
+confidence = 92.53
 
 # ======================================
 # TOP METRICS
@@ -130,7 +137,7 @@ folium.Polygon(
 ).add_to(m)
 
 # ======================================
-# PLANNED PATH
+# GENERATED PATH
 # ======================================
 
 folium.PolyLine(
@@ -141,7 +148,7 @@ folium.PolyLine(
 ).add_to(m)
 
 # ======================================
-# LIVE ROVER POSITION
+# ROVER POSITION
 # ======================================
 
 folium.Marker(
@@ -161,12 +168,14 @@ if disease_status:
 
     folium.Marker(
         path[-1],
-        popup=disease_name,
-        icon=folium.Icon(color="red")
+        popup=f"{disease_name} ({confidence:.2f}%)",
+        icon=folium.Icon(
+            color="red"
+        )
     ).add_to(m)
 
 # ======================================
-# DISPLAY MAP
+# MAP DISPLAY
 # ======================================
 
 st.subheader("🗺️ Live Farm Map")
@@ -178,7 +187,7 @@ st_folium(
 )
 
 # ======================================
-# CURRENT STATUS
+# CURRENT TASK
 # ======================================
 
 st.subheader("🤖 Current Task")
@@ -219,10 +228,20 @@ if battery < 25:
 # DISEASE ALERT PANEL
 # ======================================
 
+st.subheader("🌱 Disease Alert")
+
 if disease_status:
-    st.error(f"{disease_name} Detected")
+
+    st.error(
+        f"{disease_name} Detected\n\nConfidence: {confidence:.2f}%"
+    )
+
 else:
-    st.success("No Disease Detected")
+
+    st.success(
+        "No Disease Detected"
+    )
+
 # ======================================
 # IRRIGATION ADVISORY
 # ======================================
@@ -249,6 +268,14 @@ with st.expander("📊 Mission Details"):
 
     st.write(
         f"Status: {status}"
+    )
+
+    st.write(
+        f"Disease: {disease_name}"
+    )
+
+    st.write(
+        f"Confidence: {confidence:.2f}%"
     )
 
     st.write(
