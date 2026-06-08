@@ -157,13 +157,13 @@ folium.Marker(
 # DISEASE ALERT MARKER
 # ======================================
 
-folium.Marker(
-    path[-1],
-    popup="Disease Alert Zone",
-    icon=folium.Icon(
-        color="red"
-    )
-).add_to(m)
+if disease_status:
+
+    folium.Marker(
+        path[-1],
+        popup=disease_name,
+        icon=folium.Icon(color="red")
+    ).add_to(m)
 
 # ======================================
 # DISPLAY MAP
@@ -219,12 +219,10 @@ if battery < 25:
 # DISEASE ALERT PANEL
 # ======================================
 
-st.subheader("🌱 Disease Alert")
-
-st.success(
-    "No Disease Detected"
-)
-
+if disease_status:
+    st.error(f"{disease_name} Detected")
+else:
+    st.success("No Disease Detected")
 # ======================================
 # IRRIGATION ADVISORY
 # ======================================
