@@ -80,8 +80,8 @@ battery = latest_data["battery"]
 index = latest_data["waypoint"]
 
 rover_position = [
-    latest_data["lat"],
-    latest_data["lon"]
+    11.434,
+    78.790
 ]
 
 status = latest_data["status"]
