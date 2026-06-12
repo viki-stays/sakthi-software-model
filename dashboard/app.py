@@ -183,12 +183,10 @@ folium.Marker(
 if disease_status:
 
     folium.Marker(
-    [11.639, 78.093],
-        popup=f"{disease_name} ({confidence:.2f}%)",
-        icon=folium.Icon(
-            color="red"
-        )
-    ).add_to(m)
+    [11.435, 78.791],
+    popup=f"{disease_name} ({confidence:.2f}%)",
+    icon=folium.Icon(color="red")
+).add_to(m)
 
 # ======================================
 # MAP DISPLAY
