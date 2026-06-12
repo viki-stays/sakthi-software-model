@@ -1,0 +1,8 @@
+{
+"type": "FeatureCollection",
+"name": "alavu",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{"type":"Feature","properties":{"id":1},"geometry":{"type":"MultiPolygon","coordinates":[[[[78.788672079595401,11.442514069885805],[78.785847046172037,11.444132591502443],[78.784482295725979,11.442420436120669],[78.787007084051183,11.440708270382947],[78.788672079595401,11.442514069885805]]]]}}
+]
+}
