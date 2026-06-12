@@ -1,4 +1,4 @@
-from mqtt_subscriber import latest_data
+
 import paho.mqtt.client as mqtt
 import ssl
 import streamlit as st
@@ -24,11 +24,11 @@ def on_message(client, userdata, msg):
             msg.payload.decode()
         )
 
-        st.session_state.latest_data = payload
+        st.session_state.latest_data.update(payload)
 
     except Exception as e:
 
-        print(e)
+        print("MQTT Error:", e)
 if "mqtt_started" not in st.session_state:
 
     client = mqtt.Client()
@@ -75,7 +75,7 @@ st.error("APP VERSION ALAVU")
 # MQTT Debug Panel
 st.subheader("📡 Live MQTT Data")
 
-st.json(latest_data)
+st.json(st.session_state.latest_data)
 # ======================================
 # LOAD WAYPOINTS
 # ======================================
@@ -120,16 +120,19 @@ path = [
 # LIVE MQTT DATA
 # ======================================
 
-battery = st.session_state.latest_data["battery"]
+data = st.session_state.latest_data
 
-index = st.session_state.latest_data["waypoint"]
+battery = data.get("battery", 100)
 
-status = st.session_state.latest_data["status"]
+index = data.get("waypoint", 0)
+
+status = data.get("status", "MISSION")
 
 rover_position = [
-    st.session_state.latest_data["lat"],
-    st.session_state.latest_data["lon"]
+    data.get("lat", path[0][0]),
+    data.get("lon", path[0][1])
 ]
+
 st.write("Rover Position:", rover_position)
 # ======================================
 # DISEASE DETECTION RESULT
