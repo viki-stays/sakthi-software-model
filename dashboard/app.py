@@ -50,7 +50,7 @@ with open(WAYPOINT_FILE, "r") as f:
 
 FARM_FILE = os.path.join(
     BASE_DIR,
-    "Farm_boundary.geojson"
+    "Field.geojson"
 )
 
 with open(FARM_FILE, "r") as f:
