@@ -1,8 +1,0 @@
-{
-"type": "FeatureCollection",
-"name": "Farm",
-"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
-"features": [
-{"type":"Feature","properties":{"id":2},"geometry":{"type":"MultiPolygon","coordinates":[[[[78.789624210892853,11.44276158072547],[78.785424920410378,11.437535125664541],[78.792886968965576,11.431039820241997],[78.798022791857818,11.436477750363197],[78.789624210892853,11.44276158072547]]]]}}
-]
-}
