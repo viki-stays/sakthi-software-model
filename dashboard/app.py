@@ -631,8 +631,7 @@ folium.Polygon(
     farm_boundary,
     color="green",
     fill=True,
-    fill_opacity=0.2,
-    popup="Farm Boundary"
+    fill_opacity=0.2
 ).add_to(m)
 
 # ======================================
