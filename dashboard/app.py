@@ -42,20 +42,18 @@ WAYPOINT_FILE = os.path.join(
     "path_planning",
     "waypoints.json"
 )
+# ======================================
+# LOAD GEOJSON FARM
+# ======================================
 
-path = [
-    [11.4410, 78.7869],
-    [11.4436, 78.7852],
+FARM_FILE = os.path.join(
+    BASE_DIR,
+    "alavu.geojson"
+)
 
-    [11.4433, 78.7850],
-    [11.4408, 78.7867],
+with open(FARM_FILE, "r") as f:
+    farm_geojson = json.load(f)
 
-    [11.4406, 78.7865],
-    [11.4430, 78.7848],
-
-    [11.4427, 78.7846],
-    [11.4404, 78.7863]
-]
 
 # ======================================
 # LIVE MQTT DATA
@@ -129,6 +127,7 @@ folium.GeoJson(
         "fillOpacity": 0.15
     }
 ).add_to(m)
+st.write(farm_geojson)
 folium.PolyLine(
     path,
     color="blue",
