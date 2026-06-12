@@ -77,12 +77,10 @@ for x, y in waypoints:
 
 battery = latest_data["battery"]
 
-index = latest_data["waypoint"]
+import time
+index = int(time.time()/5) % len(path)
 
-rover_position = [
-    latest_data["lat"],
-    latest_data["lon"]
-]
+rover_position = path[index % len(path)]
 
 status = latest_data["status"]
 
