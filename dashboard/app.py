@@ -22,6 +22,7 @@ st_autorefresh(
 )
 
 st.title("🌾 SAKTHI Control Dashboard")
+st.error("APP VERSION ALAVU")
 # MQTT Debug Panel
 st.subheader("📡 Live MQTT Data")
 
