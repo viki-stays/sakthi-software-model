@@ -54,7 +54,19 @@ FARM_FILE = os.path.join(
 with open(FARM_FILE, "r") as f:
     farm_geojson = json.load(f)
 
+path = [
+    [11.44225, 78.78820],
+    [11.44355, 78.78595],
 
+    [11.44320, 78.78570],
+    [11.44190, 78.78795],
+
+    [11.44155, 78.78770],
+    [11.44285, 78.78545],
+
+    [11.44250, 78.78520],
+    [11.44120, 78.78745]
+]
 # ======================================
 # LIVE MQTT DATA
 # ======================================
@@ -127,7 +139,7 @@ folium.GeoJson(
         "fillOpacity": 0.15
     }
 ).add_to(m)
-st.write(farm_geojson)
+
 folium.PolyLine(
     path,
     color="blue",
@@ -156,7 +168,7 @@ if disease_status:
     folium.Marker(
     [11.4422, 78.7860],
     popup=f"{disease_name} ({confidence:.2f}%)",
-    icon=folium.Ico1n(color="red")
+    icon=folium.Icon(color="red")
 ).add_to(m)
 
 # ======================================
