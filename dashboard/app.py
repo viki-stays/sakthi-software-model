@@ -75,7 +75,13 @@ st.error("APP VERSION ALAVU")
 # MQTT Debug Panel
 st.subheader("📡 Live MQTT Data")
 
-st.json(st.session_state.latest_data)
+st.json({
+    "lat": rover_position[0],
+    "lon": rover_position[1],
+    "battery": battery,
+    "status": status,
+    "waypoint": index
+})
 # ======================================
 # LOAD WAYPOINTS
 # ======================================
@@ -120,19 +126,15 @@ path = [
 # LIVE MQTT DATA
 # ======================================
 
-data = st.session_state.latest_data
+import time
 
-battery = data.get("battery", 100)
+index = int(time.time() / 5) % len(path)
 
-index = data.get("waypoint", 0)
+rover_position = path[index]
 
-status = data.get("status", "MISSION")
+battery = max(20, 100 - index * 10)
 
-rover_position = [
-    data.get("lat", path[0][0]),
-    data.get("lon", path[0][1])
-]
-
+status = "MISSION"
 st.write("Rover Position:", rover_position)
 # ======================================
 # DISEASE DETECTION RESULT
