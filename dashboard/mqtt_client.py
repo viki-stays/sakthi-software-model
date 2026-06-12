@@ -9,8 +9,8 @@ USERNAME = "Sakthi"
 PASSWORD = "123456789qW"
 
 latest_data = {
-    "lat": 12.9716,
-    "lon": 77.5946,
+    "lat": 11.44225,
+    "lon": 78.7882,
     "battery": 100,
     "status": "waiting",
     "waypoint": 0
