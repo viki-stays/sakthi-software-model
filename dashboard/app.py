@@ -7,7 +7,55 @@ import folium
 from streamlit_folium import st_folium
 import json
 import os
+if "latest_data" not in st.session_state:
 
+    st.session_state.latest_data = {
+        "lat": 11.44225,
+        "lon": 78.78820,
+        "battery": 100,
+        "status": "MISSION",
+        "waypoint": 0
+    }
+def on_message(client, userdata, msg):
+
+    try:
+
+        payload = json.loads(
+            msg.payload.decode()
+        )
+
+        st.session_state.latest_data = payload
+
+    except Exception as e:
+
+        print(e)
+if "mqtt_started" not in st.session_state:
+
+    client = mqtt.Client()
+
+    client.username_pw_set(
+        "Sakthi",
+        "123456789qW"
+    )
+
+    client.tls_set(
+        tls_version=ssl.PROTOCOL_TLS
+    )
+
+    client.on_message = on_message
+
+    client.connect(
+        "8566ab19a88f457bbf19d434e33a739c.s1.eu.hivemq.cloud",
+        8883
+    )
+
+    client.subscribe(
+        "sakthi/location"
+    )
+
+    client.loop_start()
+
+    st.session_state.mqtt_started = True
 # ======================================
 # PAGE CONFIG
 # ======================================
@@ -72,15 +120,15 @@ path = [
 # LIVE MQTT DATA
 # ======================================
 
-battery = latest_data["battery"]
+battery = st.session_state.latest_data["battery"]
 
-index = latest_data["waypoint"]
+index = st.session_state.latest_data["waypoint"]
 
-status = latest_data["status"]
+status = st.session_state.latest_data["status"]
 
 rover_position = [
-    latest_data["lat"],
-    latest_data["lon"]
+    st.session_state.latest_data["lat"],
+    st.session_state.latest_data["lon"]
 ]
 st.write("Rover Position:", rover_position)
 # ======================================
@@ -183,7 +231,9 @@ st_folium(
     width=1200,
     height=550
 )
-
+st.json(
+    st.session_state.latest_data
+)
 # ======================================
 # CURRENT TASK
 # ======================================
