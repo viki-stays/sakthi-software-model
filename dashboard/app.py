@@ -42,34 +42,16 @@ WAYPOINT_FILE = os.path.join(
     "waypoints.json"
 )
 
-with open(WAYPOINT_FILE, "r") as f:
-    waypoints = json.load(f)
-# ======================================
-# LOAD FARM BOUNDARY GEOJSON
-# ======================================
-
-FARM_FILE = os.path.join(
-    BASE_DIR,
-    "Farm.geojson"
-)
-
-with open(FARM_FILE, "r") as f:
-    farm_geojson = json.load(f)
-# ======================================
-# CONVERT WAYPOINTS TO MAP COORDINATES
-# ======================================
-
-base_lat = 12.9716
-base_lon = 77.5946
-
-path = []
-
-for x, y in waypoints:
-
-    lat = base_lat + y * 0.000004
-    lon = base_lon + x * 0.0000025
-
-    path.append([lat, lon])
+path = [
+    [11.4315,78.7925],
+    [11.4370,78.7860],
+    [11.4375,78.7865],
+    [11.4320,78.7930],
+    [11.4325,78.7935],
+    [11.4380,78.7870],
+    [11.4385,78.7875],
+    [11.4330,78.7940]
+]
 
 # ======================================
 # LIVE MQTT DATA
@@ -77,13 +59,15 @@ for x, y in waypoints:
 
 battery = latest_data["battery"]
 
-import time
-index = int(time.time()/5) % len(path)
-
-rover_position = path[index % len(path)]
+index = latest_data["waypoint"]
 
 status = latest_data["status"]
 
+rover_position = [
+    latest_data["lat"],
+    latest_data["lon"]
+]
+st.write("Rover Position:", rover_position)
 # ======================================
 # DISEASE DETECTION RESULT
 # ======================================
